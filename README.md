@@ -1,16 +1,10 @@
 # claude-notify
 
-Audio notifications for [Claude Code](https://claude.ai/code) — plays sound only when you're away from the terminal.
+Audio notification for [Claude Code](https://claude.ai/code) — plays sound after Claude finishes and you haven't returned within a configurable delay.
 
 ## What it does
 
-Hooks into Claude Code events and plays 3 layers of notification when the agent needs your attention:
-
-1. **System beep** — native OS beep
-2. **Audio file** — plays `sounds/<event>.wav` or falls back to OS system sound
-3. **TTS voice** — speaks the notification message
-
-Notifications are **skipped when your terminal is in focus** — no annoying sounds while you're watching Claude work.
+When Claude stops, starts a timer. If you haven't typed anything before the timer expires, it plays a sound to let you know Claude is waiting.
 
 ## Install
 
@@ -19,70 +13,71 @@ claude plugin marketplace add Phan-Trong-Hau/claude-plugins
 claude plugin install claude-notify@Phan-Trong-Hau
 ```
 
-## Events
-
-| Event | Default message |
-|-------|----------------|
-| Agent stopped (`Stop`) | "Claude is waiting for your input" |
-| Permission needed (`PermissionRequest`) | "Claude needs your approval" |
-| Notification push (`Notification`) | "Claude has a notification" |
-| Background task done (`SubagentStop`) | "Background task completed" |
-
 ## Config
 
-Add a `"claude-notify"` key to `~/.claude/settings.json` (recommended):
+Add a `"claude-notify"` key to `~/.claude/settings.json`:
 
 ```json
 {
   "claude-notify": {
     "enabled": true,
+    "delay": 60,
+    "mode": "sound",
     "volume": 0.8,
-    "mode": "beep",
+    "sound_file": "sounds/mixkit-negative-tone-interface-tap-2569.wav",
     "messages": {
-      "stop": "Claude is waiting for your input",
-      "permission": "Claude needs your approval",
-      "notification": "Claude has a notification",
-      "subagent": "Background task completed"
+      "stop": "Claude is waiting for your input"
     }
   }
 }
 ```
 
-Settings in `~/.claude/settings.json` override the plugin's defaults — you only need to include the keys you want to change.
+Only include keys you want to override — the rest use plugin defaults.
 
-You can also edit the plugin defaults directly at `~/.claude/plugins/cache/Phan-Trong-Hau/claude-notify/1.0.0/config.json`.
+### Options
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `enabled` | `true` | Enable/disable notifications |
+| `delay` | `60` | Seconds to wait before notifying (e.g. `120` = 2 minutes) |
+| `mode` | `"sound"` | `"sound"`, `"beep"`, `"tts"`, or `"all"` |
+| `volume` | `0.8` | Playback volume (0–1) |
+| `sound_file` | bundled wav | Path to custom sound file (relative to plugin root) |
 
 ### Notification modes
 
 | `mode` | Beep | Audio file | TTS voice |
 |--------|------|-----------|-----------|
 | `"all"` | ✅ | ✅ | ✅ |
-| `"beep"` (default) | ✅ | ❌ | ❌ |
-| `"sound"` | ❌ | ✅ | ❌ |
+| `"sound"` (default) | ❌ | ✅ | ❌ |
+| `"beep"` | ✅ | ❌ | ❌ |
 | `"tts"` | ❌ | ❌ | ✅ |
 
 ## Custom sounds
 
-Drop `.wav` files into the `sounds/` directory:
-- `sounds/stop.wav`
-- `sounds/permission.wav`
-- `sounds/notification.wav`
-- `sounds/subagent.wav`
+Drop a `.wav` file anywhere and point `sound_file` to it (relative to plugin root).
 
-Falls back to OS system sound if files are missing.
+**Tip:** If your sound file is very short (< 1 second), prepend ~300ms–2s of silence to the beginning. Windows needs a moment to wake the audio device, and without leading silence the first part of the sound may be cut off.
+
+```python
+import wave
+SILENCE_MS = 500
+src = "your-sound.wav"
+with wave.open(src, 'rb') as r:
+    params = r.getparams()
+    frames = r.readframes(r.getnframes())
+silence = b'\x00' * int(params.framerate * SILENCE_MS / 1000) * params.nchannels * params.sampwidth
+with wave.open(src, 'wb') as w:
+    w.setparams(params)
+    w.writeframes(silence + frames)
+```
 
 ## Platform support
 
 | Platform | Beep | Audio | TTS |
 |----------|------|-------|-----|
-| Windows (Git Bash / MSYS2) | ✅ PowerShell `[console]::beep` | ✅ MediaPlayer | ✅ SAPI |
-| macOS | ✅ `osascript beep` | ✅ `afplay` | ✅ `say` |
-
-## Test
-
-```bash
-bash tests/run_tests.sh
-```
+| Windows (Git Bash / MSYS2) | ✅ | ✅ WinMM | ✅ SAPI |
+| macOS | ✅ `osascript` | ✅ `afplay` | ✅ `say` |
 
 ## License
 
