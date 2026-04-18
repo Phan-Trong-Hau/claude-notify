@@ -6,21 +6,27 @@ OS="$(uname -s)"
 TERMINAL_APPS_MACOS="Terminal iTerm2 Warp Alacritty kitty Hyper WezTerm"
 
 focus_windows() {
-    # Compare our tab's console window handle to the foreground window.
-    # This correctly handles multi-tab terminals (e.g. Windows Terminal)
-    # where all tabs share the same process but each has its own console window.
+    # Write a unique marker to our tab's title, then read the foreground window's
+    # title to check if it matches. This correctly handles multi-tab terminals
+    # (e.g. Windows Terminal) where all tabs share the same process but each tab
+    # has its own title reflected in the taskbar window title when active.
+    printf '\033]0;__claude_active__\007'
+    sleep 0.05  # let the terminal process the escape sequence
+
     powershell.exe -NoProfile -Command "
         Add-Type -TypeDefinition '
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 public class WF {
     [DllImport(\"user32.dll\")] public static extern IntPtr GetForegroundWindow();
-    [DllImport(\"kernel32.dll\")] public static extern IntPtr GetConsoleWindow();
+    [DllImport(\"user32.dll\")] public static extern int GetWindowText(IntPtr h, StringBuilder s, int n);
 }
 '
-        \$fg  = [WF]::GetForegroundWindow()
-        \$con = [WF]::GetConsoleWindow()
-        if (\$con -ne [IntPtr]::Zero -and \$con -eq \$fg) { exit 0 } else { exit 1 }
+        \$hwnd = [WF]::GetForegroundWindow()
+        \$sb   = New-Object System.Text.StringBuilder 512
+        [WF]::GetWindowText(\$hwnd, \$sb, 512) | Out-Null
+        if (\$sb.ToString() -like '*__claude_active__*') { exit 0 } else { exit 1 }
     " 2>/dev/null
     return $?
 }
