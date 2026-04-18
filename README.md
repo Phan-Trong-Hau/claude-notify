@@ -30,21 +30,27 @@ claude plugin install claude-notify@Phan-Trong-Hau
 
 ## Config
 
-Edit `~/.claude/plugins/cache/Phan-Trong-Hau/claude-notify/1.0.0/config.json`:
+Add a `"claude-notify"` key to `~/.claude/settings.json` (recommended):
 
 ```json
 {
-  "enabled": true,
-  "volume": 0.8,
-  "mode": "all",
-  "messages": {
-    "stop": "Claude is waiting for your input",
-    "permission": "Claude needs your approval",
-    "notification": "Claude has a notification",
-    "subagent": "Background task completed"
+  "claude-notify": {
+    "enabled": true,
+    "volume": 0.8,
+    "mode": "all",
+    "messages": {
+      "stop": "Claude is waiting for your input",
+      "permission": "Claude needs your approval",
+      "notification": "Claude has a notification",
+      "subagent": "Background task completed"
+    }
   }
 }
 ```
+
+Settings in `~/.claude/settings.json` override the plugin's defaults — you only need to include the keys you want to change.
+
+You can also edit the plugin defaults directly at `~/.claude/plugins/cache/Phan-Trong-Hau/claude-notify/1.0.0/config.json`.
 
 ### Notification modes
 
