@@ -3,6 +3,7 @@
 # Usage: notify.sh <event>
 # Exits 0 always — must never block Claude.
 EVENT="${1:-stop}"
+FORCE="${2:-}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OS="$(uname -s)"
@@ -50,7 +51,7 @@ STOP_TIME=$(date +%s)
 
 # Export vars so the detached subshell can access them.
 # Pass STOP_TIME directly so re-reading the file doesn't pick up a newer stop.
-export DELAY STOP_TIME ACTIVE_STAMP DO_BEEP DO_SOUND DO_TTS SOUND_FILE VOLUME MSG NOTIFY_OS SCRIPT_DIR
+export DELAY STOP_TIME ACTIVE_STAMP DO_BEEP DO_SOUND DO_TTS SOUND_FILE VOLUME MSG NOTIFY_OS FORCE SCRIPT_DIR
 
 # nohup detaches the process from Claude Code's process group so the
 # sleep timer doesn't show up in Claude's "running hook" status.
@@ -58,7 +59,7 @@ nohup bash -c '
   sleep "$DELAY"
   ACTIVE_TIME=$(cat "$ACTIVE_STAMP" 2>/dev/null || echo 0)
   [ "$ACTIVE_TIME" -gt "$STOP_TIME" ] && exit 0
-  bash "$SCRIPT_DIR/focus.sh" && exit 0
+  [ "$FORCE" != "--force" ] && bash "$SCRIPT_DIR/focus.sh" && exit 0
   [ "$NOTIFY_OS" = "true" ] && bash "$SCRIPT_DIR/toast.sh" "Claude" "$MSG" 2>/dev/null &
   [ "$DO_BEEP"   = "true" ] && bash "$SCRIPT_DIR/sysbeep.sh"                        2>/dev/null || true
   [ "$DO_SOUND"  = "true" ] && bash "$SCRIPT_DIR/sound.sh" "$SOUND_FILE" "$VOLUME"  2>/dev/null || true
