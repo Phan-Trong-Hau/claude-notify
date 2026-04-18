@@ -22,7 +22,7 @@ toast_windows() {
 </toast>
 \"@)
         \$toast = [Windows.UI.Notifications.ToastNotification]::new(\$xml)
-        [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Claude Code').Show(\$toast)
+        [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe').Show(\$toast)
     " 2>/dev/null
 }
 
