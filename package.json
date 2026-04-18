@@ -1,5 +1,5 @@
 {
-  "name": "claude-notify",
+  "name": "@phan-trong-hau/claude-notify",
   "version": "1.0.0",
   "description": "Audio notifications for Claude Code — only when you're away from the terminal",
   "keywords": ["claude-code", "claude-code-plugin", "notifications", "audio", "hooks"],
