@@ -2,7 +2,7 @@
   "enabled": true,
   "volume": 1.0,
   "mode": "sound",
-  "delay": 0,
+  "delay": 5,
   "notify_os": true,
   "sound_file": "sounds/mixkit-negative-tone-interface-tap-2569.wav",
   "messages": {
