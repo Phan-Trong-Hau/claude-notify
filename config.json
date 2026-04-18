@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "volume": 0.8,
-  "mode": "all",
+  "mode": "beep",
   "messages": {
     "stop": "Claude is waiting for your input",
     "permission": "Claude needs your approval",

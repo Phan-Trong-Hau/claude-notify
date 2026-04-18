@@ -37,7 +37,7 @@ Add a `"claude-notify"` key to `~/.claude/settings.json` (recommended):
   "claude-notify": {
     "enabled": true,
     "volume": 0.8,
-    "mode": "all",
+    "mode": "beep",
     "messages": {
       "stop": "Claude is waiting for your input",
       "permission": "Claude needs your approval",
@@ -56,8 +56,8 @@ You can also edit the plugin defaults directly at `~/.claude/plugins/cache/Phan-
 
 | `mode` | Beep | Audio file | TTS voice |
 |--------|------|-----------|-----------|
-| `"all"` (default) | ✅ | ✅ | ✅ |
-| `"beep"` | ✅ | ❌ | ❌ |
+| `"all"` | ✅ | ✅ | ✅ |
+| `"beep"` (default) | ✅ | ❌ | ❌ |
 | `"sound"` | ❌ | ✅ | ❌ |
 | `"tts"` | ❌ | ❌ | ✅ |
 
