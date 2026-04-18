@@ -1,0 +1,19 @@
+{
+  "name": "claude-notify",
+  "version": "1.0.0",
+  "description": "Audio notifications for Claude Code — only when you're away from the terminal",
+  "keywords": ["claude-code", "claude-code-plugin", "notifications", "audio", "hooks"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/claude-notify.git"
+  },
+  "files": [
+    ".claude-plugin/",
+    "hooks/",
+    "scripts/",
+    "sounds/",
+    "config.json",
+    "README.md"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "OWNER",
+  "description": "Claude Code plugins by OWNER",
+  "owner": {
+    "name": "OWNER",
+    "url": "https://github.com/OWNER"
+  },
+  "plugins": [
+    {
+      "name": "claude-notify",
+      "description": "Audio notifications when Claude needs attention — only when you're away",
+      "version": "1.0.0",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/OWNER/claude-notify.git"
+      },
+      "category": "productivity"
+    }
+  ]
+}

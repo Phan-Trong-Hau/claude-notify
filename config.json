@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "volume": 0.8,
+  "notify": {
+    "sysbeep": true,
+    "sound": true,
+    "tts": true
+  },
+  "messages": {
+    "stop": "Claude is waiting for your input",
+    "permission": "Claude needs your approval",
+    "notification": "Claude has a notification",
+    "subagent": "Background task completed"
+  },
+  "terminal_apps": {
+    "macos": ["Terminal", "iTerm2", "Warp", "Alacritty", "kitty", "Hyper", "WezTerm"],
+    "windows": ["WindowsTerminal", "mintty", "conhost", "cmd", "powershell", "pwsh", "bash", "wezterm", "alacritty"]
+  }
+}
