@@ -48,16 +48,16 @@ SESSION="${CLAUDE_SESSION_ID:-default}"
 STOP_STAMP="$STAMP_DIR/claude-notify-stop-$SESSION"
 ACTIVE_STAMP="$STAMP_DIR/claude-notify-active-$SESSION"
 
-date +%s > "$STOP_STAMP"
+STOP_TIME=$(date +%s)
 
-# Export vars so the detached subshell can access them
-export DELAY STOP_STAMP ACTIVE_STAMP DO_BEEP DO_SOUND DO_TTS SOUND_FILE VOLUME MSG SCRIPT_DIR
+# Export vars so the detached subshell can access them.
+# Pass STOP_TIME directly so re-reading the file doesn't pick up a newer stop.
+export DELAY STOP_TIME ACTIVE_STAMP DO_BEEP DO_SOUND DO_TTS SOUND_FILE VOLUME MSG SCRIPT_DIR
 
 # nohup detaches the process from Claude Code's process group so the
 # sleep timer doesn't show up in Claude's "running hook" status.
 nohup bash -c '
   sleep "$DELAY"
-  STOP_TIME=$(cat "$STOP_STAMP" 2>/dev/null || echo 0)
   ACTIVE_TIME=$(cat "$ACTIVE_STAMP" 2>/dev/null || echo 0)
   [ "$ACTIVE_TIME" -gt "$STOP_TIME" ] && exit 0
   [ "$DO_BEEP"  = "true" ] && bash "$SCRIPT_DIR/sysbeep.sh"                        2>/dev/null || true
