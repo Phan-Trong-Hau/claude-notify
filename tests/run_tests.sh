@@ -46,5 +46,11 @@ bash "$ROOT/scripts/sound.sh" "" "0.5" 2>/dev/null
 assert_eq "sound empty path uses fallback, exits 0" "0" "$?"
 
 echo ""
+echo "=== focus.sh tests ==="
+# When running tests from terminal, terminal SHOULD be focused → exit 0
+bash "$ROOT/scripts/focus.sh"
+assert_eq "terminal is focused when running tests" "0" "$?"
+
+echo ""
 echo "Results: $PASS passed, $FAIL failed"
 [ $FAIL -eq 0 ]
