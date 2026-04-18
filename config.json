@@ -2,7 +2,7 @@
   "enabled": true,
   "volume": 0.8,
   "mode": "sound",
-  "sound_file": "sounds/mixkit-negative-tone-interface-tap-2569.wav",
+  "sound_file": "sounds/mixkit-click-error-1110.wav",
   "messages": {
     "stop": "Claude is waiting for your input",
     "permission": "Claude needs your approval",
