@@ -25,6 +25,7 @@ public class WinMM {
     public const uint SND_NODEFAULT = 0x2;
 }
 '
+        Start-Sleep -Milliseconds 200
         [WinMM]::PlaySound(\$env:SOUND_FILE, [IntPtr]::Zero, [WinMM]::SND_FILENAME -bor [WinMM]::SND_SYNC -bor [WinMM]::SND_NODEFAULT) | Out-Null
     " 2>/dev/null
 }
