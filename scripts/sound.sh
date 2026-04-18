@@ -17,6 +17,7 @@ play_windows() {
     SOUND_FILE="$f" powershell.exe -NoProfile -Command "
         Add-Type -AssemblyName System.Windows.Forms
         \$p = New-Object System.Media.SoundPlayer \$env:SOUND_FILE
+        \$p.Load()
         \$p.PlaySync()
     " 2>/dev/null
 }
