@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "volume": 0.8,
-  "mode": "beep",
-  "focus_timeout": 30,
+  "mode": "sound",
+  "sound_file": "sounds/mixkit-negative-tone-interface-tap-2569.wav",
   "messages": {
     "stop": "Claude is waiting for your input",
     "permission": "Claude needs your approval",

@@ -32,8 +32,13 @@ case "$MODE" in
   *)     DO_BEEP=true;  DO_SOUND=true;  DO_TTS=true  ;;  # all (default)
 esac
 
-# Map event to sound file
-SOUND_FILE="$ROOT/sounds/$EVENT.wav"
+# Resolve sound file: use sound_file override if set, else event-based lookup
+SOUND_FILE_CFG=$(python3 "$PY" "$CONFIG" "sound_file" "")
+if [ -n "$SOUND_FILE_CFG" ]; then
+    SOUND_FILE="$ROOT/$SOUND_FILE_CFG"
+else
+    SOUND_FILE="$ROOT/sounds/$EVENT.wav"
+fi
 [ ! -f "$SOUND_FILE" ] && SOUND_FILE=""
 
 # Fire notifications in background so the hook returns immediately
