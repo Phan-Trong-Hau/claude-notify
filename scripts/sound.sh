@@ -15,10 +15,17 @@ play_windows() {
     [ ! -f "$f" ] && f="C:/Windows/Media/chimes.wav"
     [ ! -f "$f" ] && return 0
     SOUND_FILE="$f" powershell.exe -NoProfile -Command "
-        Add-Type -AssemblyName System.Windows.Forms
-        \$p = New-Object System.Media.SoundPlayer \$env:SOUND_FILE
-        \$p.Load()
-        \$p.PlaySync()
+        Add-Type -TypeDefinition '
+using System;
+using System.Runtime.InteropServices;
+public class WinMM {
+    [DllImport(\"winmm.dll\")] public static extern bool PlaySound(string f, IntPtr h, uint flags);
+    public const uint SND_FILENAME = 0x20000;
+    public const uint SND_SYNC    = 0x0;
+    public const uint SND_NODEFAULT = 0x2;
+}
+'
+        [WinMM]::PlaySound(\$env:SOUND_FILE, [IntPtr]::Zero, [WinMM]::SND_FILENAME -bor [WinMM]::SND_SYNC -bor [WinMM]::SND_NODEFAULT) | Out-Null
     " 2>/dev/null
 }
 
