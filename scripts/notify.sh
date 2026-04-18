@@ -19,7 +19,7 @@ PY="$SCRIPT_DIR/config.py"
 ENABLED=$(python3 "$PY" "$CONFIG" "enabled" "true")
 [ "$ENABLED" = "false" ] && exit 0
 
-# Check focus: exit 0 = terminal focused → skip
+# Check focus: exit 0 = user active → skip
 bash "$SCRIPT_DIR/focus.sh" && exit 0
 
 # Read notification settings

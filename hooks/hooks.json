@@ -1,5 +1,16 @@
 {
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/active.sh\"",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
