@@ -12,6 +12,13 @@ Hooks into Claude Code events and plays 3 layers of notification when the agent 
 
 Notifications are **skipped when your terminal is in focus** — no annoying sounds while you're watching Claude work.
 
+## Install
+
+```bash
+claude plugin marketplace add Phan-Trong-Hau/claude-plugins
+claude plugin install claude-notify@Phan-Trong-Hau
+```
+
 ## Events
 
 | Event | Default message |
@@ -20,25 +27,6 @@ Notifications are **skipped when your terminal is in focus** — no annoying sou
 | Permission needed (`PermissionRequest`) | "Claude needs your approval" |
 | Notification push (`Notification`) | "Claude has a notification" |
 | Background task done (`SubagentStop`) | "Background task completed" |
-
-## Install
-
-Add to `~/.claude/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "Phan-Trong-Hau": {
-      "source": { "source": "github", "repo": "Phan-Trong-Hau/claude-notify" }
-    }
-  },
-  "enabledPlugins": {
-    "claude-notify@Phan-Trong-Hau": true
-  }
-}
-```
-
-Then restart Claude Code. Or use the `/plugins` menu.
 
 ## Config
 
