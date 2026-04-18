@@ -13,8 +13,8 @@ toast_windows() {
         \$n = New-Object System.Windows.Forms.NotifyIcon
         \$n.Icon = [System.Drawing.SystemIcons]::Information
         \$n.Visible = \$true
-        \$n.ShowBalloonTip(5000, \$title, \$msg, [System.Windows.Forms.ToolTipIcon]::Info)
-        Start-Sleep -Milliseconds 5500
+        \$n.ShowBalloonTip(3000, \$title, \$msg, [System.Windows.Forms.ToolTipIcon]::None)
+        Start-Sleep -Milliseconds 500
         \$n.Dispose()
     " 2>/dev/null
 }
