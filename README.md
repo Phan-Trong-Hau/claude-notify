@@ -36,11 +36,7 @@ Edit `~/.claude/plugins/cache/Phan-Trong-Hau/claude-notify/1.0.0/config.json`:
 {
   "enabled": true,
   "volume": 0.8,
-  "notify": {
-    "sysbeep": true,
-    "sound": true,
-    "tts": true
-  },
+  "mode": "all",
   "messages": {
     "stop": "Claude is waiting for your input",
     "permission": "Claude needs your approval",
@@ -49,6 +45,15 @@ Edit `~/.claude/plugins/cache/Phan-Trong-Hau/claude-notify/1.0.0/config.json`:
   }
 }
 ```
+
+### Notification modes
+
+| `mode` | Beep | Audio file | TTS voice |
+|--------|------|-----------|-----------|
+| `"all"` (default) | ✅ | ✅ | ✅ |
+| `"beep"` | ✅ | ❌ | ❌ |
+| `"sound"` | ❌ | ✅ | ❌ |
+| `"tts"` | ❌ | ❌ | ✅ |
 
 ## Custom sounds
 

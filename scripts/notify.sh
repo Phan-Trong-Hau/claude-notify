@@ -23,19 +23,25 @@ ENABLED=$(python3 "$PY" "$CONFIG" "enabled" "true")
 bash "$SCRIPT_DIR/focus.sh" && exit 0
 
 # Read notification settings
-VOLUME=$(python3    "$PY" "$CONFIG" "volume"           "0.8")
-DO_BEEP=$(python3  "$PY" "$CONFIG" "notify.sysbeep"   "true")
-DO_SOUND=$(python3 "$PY" "$CONFIG" "notify.sound"     "true")
-DO_TTS=$(python3   "$PY" "$CONFIG" "notify.tts"       "true")
-MSG=$(python3      "$PY" "$CONFIG" "messages.$EVENT"  "Claude needs your attention")
+VOLUME=$(python3 "$PY" "$CONFIG" "volume"          "0.8")
+MODE=$(python3   "$PY" "$CONFIG" "mode"            "all")
+MSG=$(python3    "$PY" "$CONFIG" "messages.$EVENT" "Claude needs your attention")
+
+# Resolve which layers to fire based on mode: all | beep | sound | tts
+case "$MODE" in
+  beep)  DO_BEEP=true;  DO_SOUND=false; DO_TTS=false ;;
+  sound) DO_BEEP=false; DO_SOUND=true;  DO_TTS=false ;;
+  tts)   DO_BEEP=false; DO_SOUND=false; DO_TTS=true  ;;
+  *)     DO_BEEP=true;  DO_SOUND=true;  DO_TTS=true  ;;  # all (default)
+esac
 
 # Map event to sound file
 SOUND_FILE="$ROOT/sounds/$EVENT.wav"
 [ ! -f "$SOUND_FILE" ] && SOUND_FILE=""
 
 # Fire notifications (each script exits 0 on any failure)
-[ "$DO_BEEP"  = "true" ] && bash "$SCRIPT_DIR/sysbeep.sh"               2>/dev/null || true
-[ "$DO_SOUND" = "true" ] && bash "$SCRIPT_DIR/sound.sh" "$SOUND_FILE" "$VOLUME" 2>/dev/null || true
-[ "$DO_TTS"   = "true" ] && bash "$SCRIPT_DIR/tts.sh"  "$MSG"         "$VOLUME" 2>/dev/null || true
+[ "$DO_BEEP"  = "true" ] && bash "$SCRIPT_DIR/sysbeep.sh"                        2>/dev/null || true
+[ "$DO_SOUND" = "true" ] && bash "$SCRIPT_DIR/sound.sh" "$SOUND_FILE" "$VOLUME"  2>/dev/null || true
+[ "$DO_TTS"   = "true" ] && bash "$SCRIPT_DIR/tts.sh"   "$MSG"        "$VOLUME"  2>/dev/null || true
 
 exit 0
