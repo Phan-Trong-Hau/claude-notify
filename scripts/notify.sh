@@ -18,7 +18,7 @@ PY="$SCRIPT_DIR/config.py"
 ENABLED=$(python3 "$PY" "$CONFIG" "enabled" "true")
 [ "$ENABLED" = "false" ] && exit 0
 
-DELAY=$(python3     "$PY" "$CONFIG" "delay"             "5")
+DELAY=$(python3     "$PY" "$CONFIG" "delay"             "0")
 VOLUME=$(python3    "$PY" "$CONFIG" "volume"            "1.0")
 MODE=$(python3      "$PY" "$CONFIG" "mode"              "sound")
 MSG=$(python3       "$PY" "$CONFIG" "messages.$EVENT"   "Claude needs your attention")
