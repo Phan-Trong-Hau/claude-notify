@@ -43,10 +43,7 @@ fi
 # Record stop time, then wait DELAY seconds before notifying.
 # If user submits a prompt before delay expires, active.sh updates the
 # active timestamp and we skip the notification.
-STAMP_DIR="${TMPDIR:-/tmp}"
-SESSION="${CLAUDE_SESSION_ID:-default}"
-STOP_STAMP="$STAMP_DIR/claude-notify-stop-$SESSION"
-ACTIVE_STAMP="$STAMP_DIR/claude-notify-active-$SESSION"
+ACTIVE_STAMP="$HOME/.claude/claude-notify-active"
 
 STOP_TIME=$(date +%s)
 
