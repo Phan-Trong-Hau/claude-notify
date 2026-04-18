@@ -52,5 +52,17 @@ bash "$ROOT/scripts/focus.sh"
 assert_eq "terminal is focused when running tests" "0" "$?"
 
 echo ""
+echo "=== notify.sh tests ==="
+# notify.sh with valid event exits 0
+bash "$ROOT/scripts/notify.sh" "stop" 2>/dev/null
+assert_eq "notify stop exits 0" "0" "$?"
+# notify.sh with unknown event exits 0 (no crash)
+bash "$ROOT/scripts/notify.sh" "unknown_event" 2>/dev/null
+assert_eq "notify unknown event exits 0" "0" "$?"
+# notify.sh with no args exits 0
+bash "$ROOT/scripts/notify.sh" 2>/dev/null
+assert_eq "notify no args exits 0" "0" "$?"
+
+echo ""
 echo "Results: $PASS passed, $FAIL failed"
 [ $FAIL -eq 0 ]
