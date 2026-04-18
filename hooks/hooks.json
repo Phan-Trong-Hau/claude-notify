@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" stop",
-            "async": true
+            "timeout": 5
           }
         ]
       }
@@ -17,7 +17,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" permission",
-            "async": true
+            "timeout": 5
           }
         ]
       }
@@ -28,7 +28,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" notification",
-            "async": true
+            "timeout": 5
           }
         ]
       }
@@ -39,7 +39,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" subagent",
-            "async": true
+            "timeout": 5
           }
         ]
       }
