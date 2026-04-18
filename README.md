@@ -28,12 +28,12 @@ Add to `~/.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "OWNER": {
-      "source": { "source": "github", "repo": "OWNER/claude-notify" }
+    "Phan-Trong-Hau": {
+      "source": { "source": "github", "repo": "Phan-Trong-Hau/claude-notify" }
     }
   },
   "enabledPlugins": {
-    "claude-notify@OWNER": true
+    "claude-notify@Phan-Trong-Hau": true
   }
 }
 ```
@@ -42,7 +42,7 @@ Then restart Claude Code. Or use the `/plugins` menu.
 
 ## Config
 
-Edit `~/.claude/plugins/cache/OWNER/claude-notify/1.0.0/config.json`:
+Edit `~/.claude/plugins/cache/Phan-Trong-Hau/claude-notify/1.0.0/config.json`:
 
 ```json
 {

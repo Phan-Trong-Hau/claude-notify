@@ -1,9 +1,9 @@
 {
-  "name": "OWNER",
-  "description": "Claude Code plugins by OWNER",
+  "name": "Phan-Trong-Hau",
+  "description": "Claude Code plugins by Phan-Trong-Hau",
   "owner": {
-    "name": "OWNER",
-    "url": "https://github.com/OWNER"
+    "name": "Phan-Trong-Hau",
+    "url": "https://github.com/Phan-Trong-Hau"
   },
   "plugins": [
     {
@@ -12,7 +12,7 @@
       "version": "1.0.0",
       "source": {
         "source": "url",
-        "url": "https://github.com/OWNER/claude-notify.git"
+        "url": "https://github.com/Phan-Trong-Hau/claude-notify.git"
       },
       "category": "productivity"
     }

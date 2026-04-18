@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OWNER/claude-notify.git"
+    "url": "https://github.com/Phan-Trong-Hau/claude-notify.git"
   },
   "files": [
     ".claude-plugin/",

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Audio notifications for Claude Code — only when you're away from the terminal",
   "author": {
-    "name": "OWNER",
-    "url": "https://github.com/OWNER"
+    "name": "Phan-Trong-Hau",
+    "url": "https://github.com/Phan-Trong-Hau"
   },
-  "homepage": "https://github.com/OWNER/claude-notify",
-  "repository": "https://github.com/OWNER/claude-notify",
+  "homepage": "https://github.com/Phan-Trong-Hau/claude-notify",
+  "repository": "https://github.com/Phan-Trong-Hau/claude-notify",
   "license": "MIT"
 }
