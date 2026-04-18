@@ -59,7 +59,7 @@ nohup bash -c '
   ACTIVE_TIME=$(cat "$ACTIVE_STAMP" 2>/dev/null || echo 0)
   [ "$ACTIVE_TIME" -gt "$STOP_TIME" ] && exit 0
   bash "$SCRIPT_DIR/focus.sh" && exit 0
-  [ "$NOTIFY_OS" = "true" ] && bash "$SCRIPT_DIR/toast.sh" "Claude" "$MSG"           2>/dev/null || true
+  [ "$NOTIFY_OS" = "true" ] && bash "$SCRIPT_DIR/toast.sh" "Claude" "$MSG" 2>/dev/null &
   [ "$DO_BEEP"   = "true" ] && bash "$SCRIPT_DIR/sysbeep.sh"                        2>/dev/null || true
   [ "$DO_SOUND"  = "true" ] && bash "$SCRIPT_DIR/sound.sh" "$SOUND_FILE" "$VOLUME"  2>/dev/null || true
   [ "$DO_TTS"    = "true" ] && bash "$SCRIPT_DIR/tts.sh"   "$MSG"        "$VOLUME"  2>/dev/null || true
