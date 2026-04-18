@@ -14,11 +14,11 @@ play_windows() {
     [ ! -f "$f" ] && f="C:/Windows/Media/Windows Notify System Generic.wav"
     [ ! -f "$f" ] && f="C:/Windows/Media/chimes.wav"
     [ ! -f "$f" ] && return 0
-    powershell.exe -NoProfile -Command "
+    SOUND_FILE="$f" SOUND_VOL="$vol" powershell.exe -NoProfile -Command "
         Add-Type -AssemblyName PresentationCore
         \$p = New-Object System.Windows.Media.MediaPlayer
-        \$p.Volume = $vol
-        \$p.Open([Uri]::new('$f'))
+        \$p.Volume = [double]\$env:SOUND_VOL
+        \$p.Open([Uri]::new(\$env:SOUND_FILE))
         \$p.Play()
         Start-Sleep -Milliseconds 3000
     " 2>/dev/null &

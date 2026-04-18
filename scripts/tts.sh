@@ -15,11 +15,11 @@ case "$OS" in
         ;;
     MINGW*|MSYS*|CYGWIN*)
         VOL_INT=$(python3 -c "print(int(float('$VOLUME') * 100))" 2>/dev/null || echo "80")
-        powershell.exe -NoProfile -Command "
+        TTS_MSG="$MESSAGE" powershell.exe -NoProfile -Command "
             Add-Type -AssemblyName System.Speech
             \$s = New-Object System.Speech.Synthesis.SpeechSynthesizer
             \$s.Volume = $VOL_INT
-            \$s.Speak('$MESSAGE')
+            \$s.Speak(\$env:TTS_MSG)
         " 2>/dev/null || true
         ;;
     *)
