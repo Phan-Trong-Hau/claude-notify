@@ -36,9 +36,22 @@ play_macos() {
     afplay -v "$vol" "$f" 2>/dev/null &
 }
 
+play_linux() {
+    local f="$1" vol="$2"
+    [ ! -f "$f" ] && return 0
+    if command -v paplay >/dev/null 2>&1; then
+        paplay "$f" 2>/dev/null &
+    elif command -v aplay >/dev/null 2>&1; then
+        aplay "$f" 2>/dev/null &
+    elif command -v ffplay >/dev/null 2>&1; then
+        ffplay -nodisp -autoexit -volume "$(python3 -c "print(int(float('$vol')*100))" 2>/dev/null || echo 100)" "$f" 2>/dev/null &
+    fi
+}
+
 case "$OS" in
     Darwin)               play_macos "$FILE" "$VOLUME" ;;
     MINGW*|MSYS*|CYGWIN*) play_windows "$FILE" "$VOLUME" ;;
+    Linux)                play_linux "$FILE" "$VOLUME" ;;
     *) true ;;
 esac
 

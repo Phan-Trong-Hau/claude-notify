@@ -30,7 +30,13 @@ toast_macos() {
     osascript -e "display notification \"$MSG\" with title \"$TITLE\"" 2>/dev/null
 }
 
+toast_linux() {
+    command -v notify-send >/dev/null 2>&1 || return 0
+    notify-send --urgency=normal --expire-time=5000 "$TITLE" "$MSG" 2>/dev/null
+}
+
 case "$OS" in
     Darwin)               toast_macos ;;
     MINGW*|MSYS*|CYGWIN*) toast_windows ;;
+    Linux)                toast_linux ;;
 esac

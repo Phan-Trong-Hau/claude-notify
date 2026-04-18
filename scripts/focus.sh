@@ -43,8 +43,22 @@ focus_macos() {
     return 1
 }
 
+focus_linux() {
+    command -v xdotool >/dev/null 2>&1 || return 1
+    local wid
+    wid=$(xdotool getactivewindow 2>/dev/null) || return 1
+    local class
+    class=$(xprop -id "$wid" WM_CLASS 2>/dev/null | grep -oi '"[^"]*"' | tr -d '"' | tr '[:upper:]' '[:lower:]')
+    local TERMS="gnome-terminal konsole xterm xfce4-terminal tilix alacritty kitty wezterm bash zsh"
+    for t in $TERMS; do
+        echo "$class" | grep -q "$t" && return 0
+    done
+    return 1
+}
+
 case "$OS" in
     Darwin)               focus_macos ;;
     MINGW*|MSYS*|CYGWIN*) focus_windows ;;
+    Linux)                focus_linux ;;
     *)                    exit 1 ;;
 esac
