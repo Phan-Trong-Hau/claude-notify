@@ -27,5 +27,24 @@ assert_eq "bad path default"    "fallback" \
           "$(python3 "$ROOT/scripts/config.py" "/nonexistent/path.json" "any.key" "fallback")"
 
 echo ""
+echo "=== sysbeep.sh tests ==="
+bash "$ROOT/scripts/sysbeep.sh" 2>/dev/null
+assert_eq "sysbeep exits 0" "0" "$?"
+
+echo ""
+echo "=== tts.sh tests ==="
+bash "$ROOT/scripts/tts.sh" "Test notification" "0.5" 2>/dev/null
+assert_eq "tts exits 0" "0" "$?"
+bash "$ROOT/scripts/tts.sh" "" "0.5" 2>/dev/null
+assert_eq "tts empty message exits 0" "0" "$?"
+
+echo ""
+echo "=== sound.sh tests ==="
+bash "$ROOT/scripts/sound.sh" "/nonexistent/file.wav" "0.5" 2>/dev/null
+assert_eq "sound nonexistent file exits 0" "0" "$?"
+bash "$ROOT/scripts/sound.sh" "" "0.5" 2>/dev/null
+assert_eq "sound empty path uses fallback, exits 0" "0" "$?"
+
+echo ""
 echo "Results: $PASS passed, $FAIL failed"
 [ $FAIL -eq 0 ]
