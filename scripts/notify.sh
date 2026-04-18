@@ -41,11 +41,12 @@ else
 fi
 [ ! -f "$SOUND_FILE" ] && SOUND_FILE=""
 
-# Fire notifications in background so the hook returns immediately
+# Fire notifications in background, disown to survive hook process exit
 (
   [ "$DO_BEEP"  = "true" ] && bash "$SCRIPT_DIR/sysbeep.sh"                        2>/dev/null || true
   [ "$DO_SOUND" = "true" ] && bash "$SCRIPT_DIR/sound.sh" "$SOUND_FILE" "$VOLUME"  2>/dev/null || true
   [ "$DO_TTS"   = "true" ] && bash "$SCRIPT_DIR/tts.sh"   "$MSG"        "$VOLUME"  2>/dev/null || true
 ) &
+disown $!
 
 exit 0
