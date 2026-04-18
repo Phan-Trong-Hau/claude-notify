@@ -83,10 +83,14 @@ with wave.open(src, 'wb') as w:
 
 ## Platform support
 
-| Platform | Beep | Audio | TTS | OS Toast |
-|----------|------|-------|-----|----------|
-| Windows (Git Bash / MSYS2) | ✅ | ✅ WinMM | ✅ SAPI | ✅ WinRT |
-| macOS | ✅ `osascript` | ✅ `afplay` | ✅ `say` | ✅ `osascript` |
+| Platform | Beep | Audio | TTS | OS Toast | Focus detection |
+|----------|------|-------|-----|----------|-----------------|
+| Windows (Git Bash / MSYS2) | ✅ | ✅ WinMM | ✅ SAPI | ✅ WinRT | ✅ Win32 API |
+| macOS | ✅ `osascript` | ✅ `afplay` | ✅ `say` | ✅ `osascript` | ✅ `osascript` |
+| Linux (Ubuntu) | ✅ `printf \a` | ✅ `paplay` / `aplay` / `ffplay` | ✅ `espeak` | ✅ `notify-send` | ✅ `xdotool` |
+
+> **Linux dependencies:** `notify-send` (libnotify), `xdotool`, and one of `paplay` / `aplay` / `ffplay` for audio.
+> Install with: `sudo apt install libnotify-bin xdotool pulseaudio-utils`
 
 ## License
 
