@@ -3,38 +3,24 @@
 # Returns: 0 = terminal focused (skip notify), 1 = not focused (notify!)
 OS="$(uname -s)"
 
-TERMINAL_APPS_WINDOWS="WindowsTerminal mintty conhost cmd powershell pwsh bash wezterm alacritty"
 TERMINAL_APPS_MACOS="Terminal iTerm2 Warp Alacritty kitty Hyper WezTerm"
 
 focus_windows() {
-    # Build PowerShell array string
-    local arr
-    arr=$(echo "$TERMINAL_APPS_WINDOWS" | tr ' ' '\n' | \
-          sed "s/\(.*\)/'\1'/" | paste -sd ',' -)
-
+    # Compare our tab's console window handle to the foreground window.
+    # This correctly handles multi-tab terminals (e.g. Windows Terminal)
+    # where all tabs share the same process but each has its own console window.
     powershell.exe -NoProfile -Command "
         Add-Type -TypeDefinition '
 using System;
 using System.Runtime.InteropServices;
 public class WF {
     [DllImport(\"user32.dll\")] public static extern IntPtr GetForegroundWindow();
-    [DllImport(\"user32.dll\")] public static extern int GetWindowThreadProcessId(IntPtr h, out int pid);
+    [DllImport(\"kernel32.dll\")] public static extern IntPtr GetConsoleWindow();
 }
 '
-        \$hwnd = [WF]::GetForegroundWindow()
-        \$fpid = 0
-        [WF]::GetWindowThreadProcessId(\$hwnd, [ref]\$fpid) | Out-Null
-        \$terms = @($arr)
-        \$p = Get-Process -Id \$fpid -ErrorAction SilentlyContinue
-        while (\$p) {
-            if (\$terms -contains \$p.ProcessName) { exit 0 }
-            try {
-                \$ppid = (Get-CimInstance Win32_Process -Filter \"ProcessId=\$(\$p.Id)\" -EA Stop).ParentProcessId
-            } catch { break }
-            if (-not \$ppid -or \$ppid -eq \$p.Id) { break }
-            \$p = Get-Process -Id \$ppid -ErrorAction SilentlyContinue
-        }
-        exit 1
+        \$fg  = [WF]::GetForegroundWindow()
+        \$con = [WF]::GetConsoleWindow()
+        if (\$con -ne [IntPtr]::Zero -and \$con -eq \$fg) { exit 0 } else { exit 1 }
     " 2>/dev/null
     return $?
 }
