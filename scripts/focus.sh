@@ -1,27 +1,50 @@
 #!/bin/bash
-# Detect if the user is actively watching this session.
-# Returns: 0 = user is active (skip notify), 1 = user is away (notify!)
-#
-# Strategy: UserPromptSubmit hook writes a timestamp when the user sends a
-# message. If that timestamp is recent (within focus_timeout seconds), the
-# user is considered active. This works cross-platform without console access.
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/config.json"
-
-# Normalize to Windows path on MSYS/MINGW
+# Check if a terminal app is currently in the foreground.
+# Returns: 0 = terminal focused (skip notify), 1 = not focused (notify!)
+# Runs at notification time (not hook time), so powershell can check freely.
 OS="$(uname -s)"
-if [[ "$OS" == MINGW* || "$OS" == MSYS* || "$OS" == CYGWIN* ]]; then
-    CONFIG_FILE="$(echo "$CONFIG_FILE" | sed 's|^/\([a-zA-Z]\)/|\1:/|')"
-fi
 
-TIMEOUT=$(python3 "$SCRIPT_DIR/config.py" "$CONFIG_FILE" "focus_timeout" "30")
-STAMP_FILE="${TMPDIR:-/tmp}/claude-notify-active-${CLAUDE_SESSION_ID:-default}"
+focus_windows() {
+    powershell.exe -NoProfile -WindowStyle Hidden -Command "
+        Add-Type -TypeDefinition '
+using System;
+using System.Runtime.InteropServices;
+public class WF {
+    [DllImport(\"user32.dll\")] public static extern IntPtr GetForegroundWindow();
+    [DllImport(\"user32.dll\")] public static extern int GetWindowThreadProcessId(IntPtr h, out int pid);
+}
+'
+        \$hwnd = [WF]::GetForegroundWindow()
+        \$fpid = 0
+        [WF]::GetWindowThreadProcessId(\$hwnd, [ref]\$fpid) | Out-Null
+        \$terms = @('WindowsTerminal','mintty','conhost','wezterm','alacritty','pwsh','powershell')
+        \$p = Get-Process -Id \$fpid -EA SilentlyContinue
+        while (\$p) {
+            if (\$terms -contains \$p.ProcessName) { exit 0 }
+            try { \$ppid = (Get-CimInstance Win32_Process -Filter \"ProcessId=\$(\$p.Id)\" -EA Stop).ParentProcessId }
+            catch { break }
+            if (-not \$ppid -or \$ppid -eq \$p.Id) { break }
+            \$p = Get-Process -Id \$ppid -EA SilentlyContinue
+        }
+        exit 1
+    " 2>/dev/null
+    return $?
+}
 
-[ -f "$STAMP_FILE" ] || exit 1  # no record → user is away
+focus_macos() {
+    local frontmost
+    frontmost=$(osascript -e \
+        'tell application "System Events" to get name of first process whose frontmost is true' \
+        2>/dev/null) || return 1
+    local TERMINAL_APPS="Terminal iTerm2 Warp Alacritty kitty Hyper WezTerm"
+    for app in $TERMINAL_APPS; do
+        [ "$frontmost" = "$app" ] && return 0
+    done
+    return 1
+}
 
-LAST=$(cat "$STAMP_FILE" 2>/dev/null) || exit 1
-NOW=$(date +%s)
-DIFF=$(( NOW - LAST ))
-
-[ "$DIFF" -lt "$TIMEOUT" ]  # exit 0 if recent (active), exit 1 if old (away)
+case "$OS" in
+    Darwin)               focus_macos ;;
+    MINGW*|MSYS*|CYGWIN*) focus_windows ;;
+    *)                    exit 1 ;;
+esac
