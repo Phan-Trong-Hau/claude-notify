@@ -19,9 +19,6 @@ PY="$SCRIPT_DIR/config.py"
 ENABLED=$(python3 "$PY" "$CONFIG" "enabled" "true")
 [ "$ENABLED" = "false" ] && exit 0
 
-# Check focus: exit 0 = user active → skip
-bash "$SCRIPT_DIR/focus.sh" && exit 0
-
 # Read notification settings
 VOLUME=$(python3 "$PY" "$CONFIG" "volume"          "0.8")
 MODE=$(python3   "$PY" "$CONFIG" "mode"            "all")
