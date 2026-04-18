@@ -9,13 +9,20 @@ toast_windows() {
     powershell.exe -NoProfile -WindowStyle Hidden -Command "
         \$title = '$TITLE'
         \$msg   = '$MSG'
-        Add-Type -AssemblyName System.Windows.Forms
-        \$n = New-Object System.Windows.Forms.NotifyIcon
-        \$n.Icon = [System.Drawing.SystemIcons]::Information
-        \$n.Visible = \$true
-        \$n.ShowBalloonTip(3000, \$title, \$msg, [System.Windows.Forms.ToolTipIcon]::None)
-        Start-Sleep -Milliseconds 500
-        \$n.Dispose()
+        [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+        [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
+        \$xml = New-Object Windows.Data.Xml.Dom.XmlDocument
+        \$xml.LoadXml(@\"
+<toast>
+  <visual><binding template=\"ToastGeneric\">
+    <text>\$title</text>
+    <text>\$msg</text>
+  </binding></visual>
+  <audio silent=\"true\"/>
+</toast>
+\"@)
+        \$toast = [Windows.UI.Notifications.ToastNotification]::new(\$xml)
+        [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Claude Code').Show(\$toast)
     " 2>/dev/null
 }
 
