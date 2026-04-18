@@ -27,8 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" permission --force",
-            "async": true
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" permission --force"
           }
         ]
       }
