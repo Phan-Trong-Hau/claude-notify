@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PASS=0; FAIL=0

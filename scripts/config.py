@@ -32,7 +32,10 @@ def main():
         val = c
         for k in key.split('.'):
             val = val[k]
-        print(str(val).lower() if isinstance(val, bool) else str(val))
+        if isinstance(val, (dict, list)):
+            print(default)
+        else:
+            print(str(val).lower() if isinstance(val, bool) else str(val))
     except Exception:
         print(default)
 
