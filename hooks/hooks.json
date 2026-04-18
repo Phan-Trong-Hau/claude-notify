@@ -17,7 +17,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh\" stop",
-            "timeout": 5
+            "async": true
           }
         ]
       }
